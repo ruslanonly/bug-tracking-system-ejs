@@ -1,6 +1,7 @@
 import { RequestHandler } from "express";
 
 import { ProductsRepository } from "../repositories/ProductsRepository";
+import { QueryError, QuerySuccess } from "../models/query";
 
 export class ProductsController {
     private productRepository: ProductsRepository;
@@ -16,11 +17,10 @@ export class ProductsController {
             if (product) {
                 res.status(200).json(product);
             } else {
-                res.status(404).send('Product not found');
+                res.status(404).json(new QueryError(['Продукт не найден']));
             }
         } catch (error) {
-            console.error('Error fetching product:', error);
-            res.status(500).send('Internal server error');
+            res.status(500).send(new QueryError([`Произошла ошибка сервера: ${error}`]));
         }
     };
 
@@ -29,8 +29,7 @@ export class ProductsController {
             const products = await this.productRepository.getProducts();
             res.status(200).json(products);
         } catch (error) {
-            console.error('Error fetching products:', error);
-            res.status(500).send('Internal server error');
+            res.status(500).json(new QueryError([`Произошла ошибка сервера: ${error}`]));
         }
     };
 
@@ -40,8 +39,7 @@ export class ProductsController {
             const productId = await this.productRepository.addProduct(name, description);
             res.status(201).json({ id: productId });
         } catch (error) {
-            console.error('Error adding product:', error);
-            res.status(500).send('Internal server error');
+            res.status(500).json(new QueryError([`Произошла ошибка сервера: ${error}`]));
         }
     };
 
@@ -51,13 +49,13 @@ export class ProductsController {
         try {
             const success = await this.productRepository.editProduct(parseInt(id), name, description);
             if (success) {
-                res.status(200).send('Product updated successfully');
+                res.status(200).json(new QuerySuccess('Продукт успешно изменен'));
             } else {
-                res.status(404).send('Product not found');
+                res.status(404).json(new QueryError(['Продукт не найден']));
             }
         } catch (error) {
             console.error('Error updating product:', error);
-            res.status(500).send('Internal server error');
+            res.status(500).json(new QueryError([`Произошла ошибка сервера: ${error}`]));
         }
     };
 
@@ -66,13 +64,13 @@ export class ProductsController {
         try {
             const success = await this.productRepository.deleteProduct(parseInt(id));
             if (success) {
-                res.status(200).send('Product deleted successfully');
+                res.status(200).json(new QuerySuccess('Продукт успешно удален'));
             } else {
-                res.status(404).send('Product not found');
+                res.status(404).json(new QueryError(['Продукт не найден']));
             }
         } catch (error) {
             console.error('Error deleting product:', error);
-            res.status(500).send('Internal server error');
+            res.status(500).json(new QueryError([`Произошла ошибка сервера: ${error}`]));
         }
     };
 }

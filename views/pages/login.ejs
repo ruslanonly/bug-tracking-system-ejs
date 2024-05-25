@@ -46,17 +46,10 @@
             success: (response) => {
                 window.location.href = '/'
             },
-            error: (response) => {
-                const errors = response.responseJSON
-                if (errors?.entries) {
-                    const entries = Object.entries(errors?.errors)
-                    entries.forEach((errorEntry) => {
-                        const errorField = errorEntry[0]
-                        const errorInfo = errorEntry[1]
-                        toast(errorInfo.message, 'error')
-                    })
-                }
-
+            error: (r) => {
+                const response = r.responseJSON
+                const messages = response.messages
+                handleErrorMessages(messages)
             }
         })
     }
