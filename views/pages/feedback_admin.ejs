@@ -1,0 +1,137 @@
+<style>
+    .feedback-list {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .feedback-list__item {
+        padding: 15px;
+        position: relative;
+        background-color: var(--gray-100);
+        border-radius: 10px;
+    }
+
+    .feedback-list__item-top {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .feedback-list__item-top button {
+        color: var(--red-500);
+    }
+
+    .feedback-list__item-bottom {
+        margin-top: 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+    }
+
+    .feedback-list__item-bottom-left {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .feedback-list__item-bottom-name {
+        color: var(--gray-500);
+    }
+
+    .feedback-list__item-bottom-email, .feedback-list__item-bottom-date {
+        font-size: 12px;
+        color: var(--gray-500);
+    }
+
+    .feedback-list__item-topic {
+        margin: 0 0;
+    }
+
+</style>
+<div class="layout__cols">
+    <div class="layout__col">
+        <div class="sidebar tile tile--sm">
+            <a class="sidebar__item" href="/">На главную страницу</a>
+        </div>
+    </div>
+    <div class="layout__col layout__col--stretched">
+        <div class="tile">
+            <h2 class="page__title">Обратная связь</h2>
+            <div class="feedback-list"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const renderFeedbacks = (feedbacks) => {
+        let html = ''
+        
+        feedbacks.forEach((feedback) => {
+            html += `
+                <div class="feedback-list__item" data-id=${feedback._id}>
+                    <div class="feedback-list__item-top">
+                        <h3 class="feedback-list__item-topic">${feedback.topic}</h3>
+                        <button>Удалить</button>
+                    </div>
+                    <p class="feedback-list__item-message">${feedback.message}</p>
+
+                    <div class="feedback-list__item-bottom">
+                        <div class="feedback-list__item-bottom-left">
+                            <span class="feedback-list__item-bottom-name">${feedback.user.name}</span>
+                            <span class="feedback-list__item-bottom-email">${feedback.user.email}</span>
+                        </div>
+                        <span class="feedback-list__item-bottom-date">${new Date(feedback.createdAt).toLocaleString()}</span>
+                    </div>
+                </div>
+            `
+        })
+        $('.feedback-list').html(html)
+    }
+    const getFeedbacks = (data) => {
+        $.ajax({
+            url: `/v1/feedbacks`,
+            method: 'GET',
+            data,
+            success: (response) => {
+                renderFeedbacks(response)
+            },
+            error: (response) => {
+                const errors = response.responseJSON
+                const entries = Object.entries(errors.errors)
+                entries.forEach((errorEntry) => {
+                    const errorField = errorEntry[0]
+                    const errorInfo = errorEntry[1]
+                    toast(errorInfo.message, 'error')
+                })
+            }
+        })
+    }
+
+    getFeedbacks()
+
+    const deleteFeedback = (id) => {
+        $.ajax({
+            url: `/v1/feedback/${id}`,
+            method: 'DELETE',
+            success: (response) => {
+                toast('Заявка на обратную связь успешно удалена', 'success')
+                getFeedbacks()
+            },
+            error: (response) => {
+                const errors = response.responseJSON
+                const entries = Object.entries(errors.errors)
+                entries.forEach((errorEntry) => {
+                    const errorField = errorEntry[0]
+                    const errorInfo = errorEntry[1]
+                    toast(errorInfo.message, 'error')
+                })
+            }
+        })
+    }
+
+    $('.feedback-list').on('click', '.feedback-list__item .feedback-list__item-top button', function() {
+        const id = $(this).parent().parent().data('id')
+        console.log(id)
+        deleteFeedback(id)
+    })
+</script>

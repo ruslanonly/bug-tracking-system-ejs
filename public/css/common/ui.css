@@ -1,0 +1,132 @@
+.select {
+    font-size: 14px;
+    cursor: pointer;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border: 0;
+    display: block;
+    font-family: inherit;
+    height: 100%;
+    width: 100%;
+    padding: 7px 10px;
+    border-radius: 6px;
+    outline: none;
+    box-shadow: 0 0 0 1px var(--gray-300);
+}
+
+.select:hover,
+.select:focus {
+    border: none;
+    background-color: var(--gray-100);
+}
+
+.button {
+    text-align: center;
+    width: 100%;
+    font-size: 14px;
+    cursor: pointer;
+    border: 0;
+    border-radius: 7px;
+    box-sizing: border-box;
+    display: inline-block;
+    margin: 0;
+    max-width: 100%;
+    min-height: 28px;
+    min-width: 80px;
+    padding: 7px;
+    position: relative;
+    text-decoration: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+
+    color: var(--gray-50);
+    background-color: var(--violet-400);
+}
+
+.button:disabled {
+    background-color: var(--violet-200);
+    cursor: default;
+}
+
+.button:disabled:hover {
+    background-color: var(--violet-200);
+}
+
+.button:hover {
+    background-color: var(--violet-500);
+}
+
+.button.warning {
+    color: var(--gray-900);
+    background-color: var(--yellow-300);
+}
+
+.button.danger {
+    background-color: var(--red-400);
+}
+
+.button.danger:hover {
+    background-color: var(--red-500);
+}
+
+.button.button-link {
+    background-color: transparent;
+    color: var(--violet-500);
+}
+
+.button.button-link:hover {
+    color: var(--violet-600);
+}
+
+.button--secondary {
+    background-color: var(--violet-100);
+    color: var(--violet-700);
+    border: solid 2px var(--violet-300);
+}
+
+.button--secondary:hover {
+background-color: var(--violet-200);
+}
+
+.input {
+    outline: none;
+    padding: 5px 10px;
+    border-radius: 8px;
+    border: none;
+    box-shadow: 0 0 0 1px var(--gray-300);
+    font-size: 14px;
+}
+
+.input:focus-visible {
+    box-shadow: 0 0 0 1px var(--violet-500);
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.form-item label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 14px;
+    color: var(--gray-500);
+}
+
+.form-item input,
+.form-item textarea {
+    width: 100%;
+}
+
+.form-item input, .form-item select {
+    height: 30px;
+}
+
+.form-item textarea {
+    min-height: 50px;
+    resize: none;
+}

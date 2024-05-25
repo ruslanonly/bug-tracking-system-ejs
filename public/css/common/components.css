@@ -1,0 +1,36 @@
+.alert {
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.alert__title {
+    display: block;
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 16px;
+}
+
+.alert__tesises {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-bottom: 32px;
+}
+
+.alert__tesis {
+    font-size: 14px;
+    width: fit-content;
+    padding: 8px;
+    background: var(--red-50);
+    border: 1px solid var(--red-200);
+    border-radius: 8px;
+}
+
+.alert__buttons {
+    display: flex;
+    gap: 16px;
+}
+
+.alert__buttons a {
+    text-align: center;
+}

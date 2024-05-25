@@ -1,0 +1,40 @@
+<style>
+    .nav-buttons {
+        display: flex;
+        gap: 10px;
+    }
+
+    .error-404 {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+    }
+
+    .error-404 span {
+        font-size: 220px;
+        line-height: 200px;
+        font-weight: 600;
+        color: var(--gray-200);
+    }
+
+    .error-404 h1 {
+        text-align: center;
+        color: var(--gray-400);
+    }
+</style>
+<div class="layout__cols">
+    <div class="layout__col">
+        <div class="sidebar tile tile--sm">
+            <a class="sidebar__item" href="/">На главную страницу</a>
+        </div>
+    </div>
+    <div class="layout__col layout__col--stretched">
+        <div class="tile">
+            <div class="error-404">
+                <span>404</span>
+                <h1>Страница не найдена</h1>
+            </div>
+        </div>
+    </div>
+</div>

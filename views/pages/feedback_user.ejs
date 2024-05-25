@@ -1,0 +1,79 @@
+<style>
+</style>
+<div class="layout__cols">
+    <div class="layout__col">
+        <div class="sidebar tile tile--sm">
+            <a class="sidebar__item" href="/">На главную страницу</a>
+        </div>
+    </div>
+    <div class="layout__col layout__col--stretched">
+        <div class="tile">
+            <h2 class="page__title">Обратная связь</h2>
+            <form id="create-feedback__form" class="form">
+                <div class="form-item">
+                    <label for='topic'>Тема сообщения *</label>
+                    <input class="input" type='text' name='topic' required>
+                </div>
+                <div class="form-item">
+                    <label for='message'>Сообщение *</label>
+                    <textarea class="input" type='text' name='message' required></textarea>
+                </div>
+                <button id="submit-button" class="button">Отправить</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    const addProduct = (data) => {
+        $.ajax({
+            url: `/v1/feedback`,
+            method: 'POST',
+            data,
+            success: (response) => {
+                $('#create-feedback__form [name]').val('')
+                toast('Заявка на обратную связь была успешно зарегистрирована', 'success')
+            },
+            error: (response) => {
+                const errors = response.responseJSON
+                const entries = Object.entries(errors.errors)
+                entries.forEach((errorEntry) => {
+                    const errorField = errorEntry[0]
+                    const errorInfo = errorEntry[1]
+                    toast(errorInfo.message, 'error')
+                })
+
+            }
+        })
+    }
+    $('#submit-button').on('click', (e) => {
+        e.preventDefault()
+
+        const required = {
+            name: 'Название продукта',
+        }
+
+        const requiredNames = Object.keys(required)
+
+        let hasEmptyRequired = false;
+
+        const formValues = {}
+        $.each($('#create-feedback__form').serializeArray(), function(i, field) {
+            formValues[field.name] = field.value
+            const formItem = $(`label[for='${field.name}']`).parent()
+            const fieldName = formItem.find('label').text().replace('*', '').trim()
+            const input = formItem.find('[name]')
+
+            if (input.attr('required') && !field.value) {
+                hasEmptyRequired = true
+                toast(`Поле \"${fieldName}\" не должно быть пустым`, 'error')
+            }
+        })
+
+        if (hasEmptyRequired) {
+            return
+        }
+
+        addProduct(formValues)
+    })
+</script>

@@ -1,0 +1,163 @@
+<style>
+    .course {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .course-top {
+        display: flex;
+        gap: 40px;
+    }
+
+    .course-top__item {
+        display: flex;
+        gap: 15px;
+    }
+
+    .course-top__item-title {
+        color: var(--gray-400);
+    }
+
+    .course-top__item-body {
+        margin: 0 0;
+    }
+
+    .form-item-group {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .create-course__form-wrapper {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .create-course__form {
+        flex-direction: row;
+        column-gap: 32px;
+    }
+
+    .create-course__form .form-item-group {
+        flex: 1;
+    }
+
+    .course-steps {
+        margin-top: 15px;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .course-steps__step {
+        padding: 15px;
+        position: relative;
+        background-color: var(--gray-100);
+        border-radius: 10px;
+    }
+
+    .course-steps__step-top {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .course-steps__step-top button {
+        color: var(--red-500);
+    }
+
+    .course-steps__step-bottom {
+        margin-top: 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+    }
+
+    .course-steps__step-bottom-left {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .course-steps__step-bottom-name {
+        color: var(--gray-500);
+    }
+
+    .course-steps__step-bottom-email, .course-steps__step-bottom-date {
+        font-size: 12px;
+        color: var(--gray-500);
+    }
+
+    .course-steps__step-topic {
+        margin: 0 0;
+    }
+
+    #add-step-button {
+        font-size: 25px;
+        padding: 0;
+    }
+</style>
+<div class="layout__cols">
+    <div class="layout__col">
+        <div class="sidebar tile tile--sm">
+            <a class="sidebar__item" href="/">На главную страницу</a>
+        </div>
+    </div>
+    <div class="layout__col layout__col--stretched">
+        <div class="tile">
+            <h2 class="page__title">Создание курса</h2>
+            <div class="create-course__form-wrapper">
+                <form id="create-course__form" class="form create-course__form">
+                    <div class="form-item-group">
+                        <div class="form-item">
+                            <label for='title'>Название курса</label>
+                            <input class="input" type='text' name='title' required>
+                        </div>
+                        <div class="form-item">
+                            <label for='description'>Описание курса</label>
+                            <input class="input" type='text' name='description' required></input>
+                        </div>
+                        <div class="form-item">
+                            <label for='description'>Количество циклов</label>
+                            <input class="input" type='text' name='description' required></input>
+                        </div>
+                    </div>
+                    <div class="form-item-group">
+                        <div class="form-item">
+                            <label for='category'>Категория курса</label>
+                            <select class="select" type='text' name='category' required></select>
+                        </div>
+                        <div class="form-item">
+                            <label for='complexity'>Сложность курса</label>
+                            <select class="select" type='text' name='complexity' required></select>
+                        </div>
+                    </div>
+                </form>
+                <div class="form-item">
+                    <label for='complexity'>Шаги курса</label>
+                    <div class="course-steps">
+                        <div class="course-steps__step" data-id=${feedback._id}>
+                            <div class="course-steps__step-top">
+                                <h3 class="course-steps__step-topic">Название шага *</h3>
+                                <button>Удалить</button>
+                            </div>
+                            <p class="course-steps__step-message">Описание курса</p>
+        
+                            <div class="course-steps__step-bottom-left">
+                                <span class="course-steps__step-bottom-name">Длительность 123 секунд</span>
+                            </div>
+                        </div>
+                        <a id="add-step-button" href="#add-step-modal" class="button button--secondary" style="max-width: 70px;">+</a>
+                    </div>
+                </div>
+                <button id="submit-button" class="button">Создать</button>
+            </div>
+        </div>
+    </div>
+
+    <%- include('./modals/add-step-modal'); %>
+</div>
+<script>
+
+</script>

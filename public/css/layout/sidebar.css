@@ -1,0 +1,17 @@
+.sidebar__item {
+    font-size: 14px;
+    display: block;
+    border-radius: 6px;
+    margin-bottom: 2px;
+    padding: 10px;
+}
+
+.sidebar__item:hover, .sidebar__item--active {
+    background-color: var(--gray-200);
+}
+
+.sidebar__buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
