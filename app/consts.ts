@@ -2,6 +2,6 @@ const COOKIE_NAME = {
     AUTH_TOKEN: 'Auth-Token'
 }
 
-module.exports = {
+export {
     COOKIE_NAME
 }

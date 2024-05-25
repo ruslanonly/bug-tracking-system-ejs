@@ -53,8 +53,8 @@
 </style>
 <div id="header-auth-user" class="header-auth-user__wrapper">
     <div class="header-auth-user__info">
-        <label for="name"></label>
-        <label for="email"></label>
+        <label for="name"><%- user.login %></label>
+        <label for="email"><%- user.email %></label>
     </div>
     <div class="header-auth-user__avatar <% if (user?.is_admin) { %> header-auth-user__avatar--admin <% } %>">
         <span></span>
@@ -91,33 +91,7 @@
     </button>
 </div>
 <script>
-    const getUserMe = (data) => {
-        $.ajax({
-            url: `/v1/users/me`,
-            method: 'GET',
-            data,
-            success: (response) => {
-                console.log(response)
-                $('#header-auth-user .header-auth-user__avatar span').text(response.name[0])
-                $('#header-auth-user .header-auth-user__info label[for=name]').text(response.name)
-                $('#header-auth-user .header-auth-user__info label[for="email"]').text(response.email)
-            },
-            error: (response) => {
-                const errors = response.responseJSON
-                if (errors?.entries) {
-                    const entries = Object.entries(errors?.errors)
-                    entries.forEach((errorEntry) => {
-                        const errorField = errorEntry[0]
-                        const errorInfo = errorEntry[1]
-                        toast(errorInfo.message, 'error')
-                    })
-                }
-
-            }
-        })
-    }
-
-    getUserMe()
+    $('#header-auth-user .header-auth-user__avatar span').text(<%- user.name %>[0])
 
     const logout = () => {
         deleteCookie('Auth-Token')

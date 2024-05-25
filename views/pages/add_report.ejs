@@ -1,0 +1,137 @@
+<div class="layout__cols">
+    <div class="layout__col">
+        <div class="sidebar tile tile--sm">
+            <a type="submit" class="button" style="text-align: center" href="/reports">
+                Отчеты
+            </a>
+        </div>
+    </div>
+    <div class="layout__col layout__col--stretched">
+        <div class="tile">
+            <h2 class="page__title">Добавление отчета</h2>
+            <div class="add_report">
+                <form id="report-form" class="form">
+                    <div class="form-item">
+                        <label for='name'>Название *</label>
+                        <input class="input" type='text' name='name' required>
+                    </div>
+                    <div class="form-item">
+                        <label for='product_id'>Продукт *</label>
+                        <select class="select" name="product_id" placeholder="Любой продукт" required></select>
+                    </div>
+                    <div class="form-item">
+                        <label for='priority'>Приоритет</label>
+                            <select class="select" name="priority" placeholder="Любой приоритет"></select>
+                    </div>
+                    <div class="form-item">
+                        <label for='problem'>Проблема *</label>
+                        <select class="select" name="problem" placeholder="Любой тип проблемы" required></select>
+                    </div>
+                    <div class="form-item">
+                        <label for='name'>Шаги воспроизведения *</label>
+                        <textarea class="input" name='playback_steps' required></textarea>
+                    </div>
+                    <div class="form-item">
+                        <label for='name'>Фактический результат *</label>
+                        <textarea class="input" name='actual_result' required></textarea>
+                    </div>
+                    <div class="form-item">
+                        <label for='name'>Ожидаемый результат *</label>
+                        <textarea class="input" name='expected_result' required></textarea>
+                    </div>
+                    <button id="submit-button" class="button">Добавить</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const option = (value, label, selected) => {
+        if (selected) {
+            return `<option value="${value}" selected>${label}</option>`
+        } else {
+            return `<option value="${value}">${label}</option>`
+        }
+    }
+
+    const getSelectOptions = (options) => {
+        let html = ''
+
+        for(let i = 0; i < options.length; i++) {
+            const optionName = options[i]
+            html += option(i, optionName)
+        }
+
+        return html
+    }
+
+    const emptyOption = option('empty', )
+
+    $('select[name="problem"]').html(option('', 'Проблема не выбрана') + getSelectOptions(REPORT_PROBLEM))
+    $('select[name="priority"]').html(option('', 'Приоритет не выбран') + getSelectOptions(REPORT_PRIORITY))
+
+    $(document).ready(() => {
+        $.ajax({
+            url: '/v1/products',
+            method: 'GET',
+            success: (products) => {
+                const html = option('', 'Продукт не выбран') + products.map((p) => option(p.id, p.name))
+                $('select[name="product_id"]').html(html)
+            },
+            error: () => {
+                toast('Не удалось получить список продуктов', 'error')
+            }
+        })
+    })
+
+    const addReport = (data) => {
+        $.ajax({
+            url: `/v1/products`,
+            method: 'POST',
+            data,
+            success: (response) => {
+                window.location.href = '/reports'
+            },
+            error: (error) => {
+                const messages = $.parseJSON(error.responseText).messages
+                messages.forEach((message) => {
+                    toast(message, 'error')
+                })
+            }
+        })
+    }
+
+    $('#submit-button').on('click', (e) => {
+        e.preventDefault()
+
+        const required = {
+            name: 'Название',
+            product_id: 'Продукт',
+            problem: 'Проблема',
+            playback_steps: 'Шаги воспроизведения',
+            actual_result: 'Фактический результат',
+            expected_result: 'Ожидаемый результат'
+        }
+
+        const requiredNames = Object.keys(required)
+
+        let hasEmptyRequired = false;
+
+        const formValues = {}
+        $.each($('#report-form').serializeArray(), function(i, field) {
+            formValues[field.name] = field.value
+
+            if (requiredNames.includes(field.name) && !field.value) {
+                hasEmptyRequired = true
+                toast(`Поле \"${required[field.name]}\" не должно быть пустым`, 'error')
+            }
+        })
+
+        if (hasEmptyRequired) {
+            return
+        }
+
+        addReport(formValues)
+    })
+</script>

@@ -20,8 +20,8 @@
             </div>
             <form id="register__form" class="form">
                 <div class="form-item">
-                    <label for='name'>Имя *</label>
-                    <input class="input" type='text' name='name' required>
+                    <label for='login'>Имя *</label>
+                    <input class="input" type='text' name='login' required>
                 </div>
                 <div class="form-item">
                     <label for='email'>Почта *</label>
@@ -42,11 +42,11 @@
 </div>
 <script>
     $('#register__form .form-item input').on('input', function() {
-        const name = $('input[name="name"]').val()
+        const login = $('input[name="login"]').val()
         const email = $('input[name="email"]').val()
         const password1 = $('input[name="password1"]').val()
         const password2 = $('input[name="password2"]').val()
-        $('#submit-button').attr('disabled', !(name && email && password1 && password2))
+        $('#submit-button').attr('disabled', !(login && email && password1 && password2))
     })
 
     const login = (data) => {
@@ -75,7 +75,7 @@
         e.preventDefault()
 
         const required = {
-            name: 'Псевдоним пользователя',
+            login: 'Псевдоним пользователя',
             email: 'Почта',
             password: 'Пароль'
         }
@@ -109,7 +109,7 @@
         }
 
         login({
-            name: formValues.name,
+            login: formValues.login,
             email: formValues.email,
             password: formValues.password1
         })

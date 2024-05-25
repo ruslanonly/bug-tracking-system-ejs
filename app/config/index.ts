@@ -1,4 +1,7 @@
 const config = {
+    JWT: {
+        SECRET: 'my-secret'
+    },
     APPLICATION: {
         PORT: 3000,
     },
@@ -11,4 +14,4 @@ const config = {
     }
 }
 
-module.exports = config
+export default config

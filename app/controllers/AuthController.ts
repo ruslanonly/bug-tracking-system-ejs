@@ -1,53 +1,51 @@
 import { RequestHandler } from "express";
-import { UserRepository } from "../repositories/UserRepository";
+import jwt from 'jsonwebtoken'
+import bcrypt from 'bcryptjs'
 
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-const User = require('../models/User.js');
+import { UsersRepository } from "../repositories/UsersRepository";
+import config from "../config";
+import { COOKIE_NAME } from "../consts";
 
 export class AuthController {
-    private userRepository: UserRepository
+    private usersRepository: UsersRepository
 
     constructor(
-        userRepository: UserRepository
+        usersRepository: UsersRepository
     ) {
-        this.userRepository = userRepository
+        this.usersRepository = usersRepository
     }
 
     register: RequestHandler = async (req, res) => {
-        const emailExists = await User.findOne({email: req.body.email});
+        const emailExists = await this.usersRepository.findByEmail(req.body.email);
         if(emailExists) return res.status(400).send('Email address already exists');
     
         // Hash the password
         const salt = bcrypt.genSaltSync(10);
         const hashedPassword = bcrypt.hashSync(req.body.password, salt);
-    
-        // Save user
-        const user = User({
-           email: req.body.email,
-           name: req.body.name,
-           password: hashedPassword
-        });
-    
+        console.log(req.body.password, hashedPassword)
         try {
-            const newUser = await user.save()
-            res.send({user: newUser._id});
+            const user = this.usersRepository.create(req.body.login, hashedPassword, req.body.email).catch((err) => console.log(err))
+            res.status(201).send(user)
         } catch (error) {
             res.send({message: error})
         }
     }
     
     login: RequestHandler = async (req, res) => {
-        const registeredUser = await User.findOne({email: req.body.email});
+        const registeredUser = await this.usersRepository.findByEmail(req.body.email);
         if(!registeredUser) return res.status(400).send('User with this email does not exist');
     
         // Check password
         const passwordMatch = bcrypt.compareSync(req.body.password, registeredUser.password);
         if(!passwordMatch) return res.status(400).send('Email or Password do not match');
     
-        // Create and assign JWT
-        const token = jwt.sign({_id: registeredUser._id}, process.env.JWT_SECRET);
-        res.header('auth-token', token).send(token);
+        const tokenPayload = {
+            _id: registeredUser._id,
+            login: registeredUser.login,
+            email: registeredUser.email
+        }
+        const token = jwt.sign(tokenPayload, config.JWT.SECRET);
+        res.cookie(COOKIE_NAME.AUTH_TOKEN, token).send();
     }
 }
 

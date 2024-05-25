@@ -1,6 +1,6 @@
 import mysql, { OkPacket } from 'mysql2/promise'
 
-export class UserRepository {
+export class UsersRepository {
     private connection: mysql.Connection
 
     constructor(

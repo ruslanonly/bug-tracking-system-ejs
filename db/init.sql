@@ -5,7 +5,7 @@ CREATE TABLE users (
   id int PRIMARY KEY AUTO_INCREMENT,
   login varchar(255) NOT NULL UNIQUE,
   password varchar(500) NOT NULL,
-  email varchar(500) NOT NULL UNIQUE,
+  email varchar(500) NOT NULL UNIQUE
 );
 
 CREATE TABLE product (
